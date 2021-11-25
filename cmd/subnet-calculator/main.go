@@ -117,31 +117,31 @@ func main() {
 }
 
 func printInfo() {
-	fmt.Print("\u001b[34;1m[*] IP Address:        ")
+	fmt.Print("\u001b[34;1m[*] IP Address:      ")
 	fmt.Printf("\u001b[0m%s\n", ip)
 
-	fmt.Print("\u001b[34;1m[*] IP in Binary:      ")
+	fmt.Print("\u001b[34;1m[*] IP in Binary:    ")
 	fmt.Printf("\u001b[0m%s\n", ips.ConvertToBinary(ip))
 
-	fmt.Print("\u001b[34;1m[*] Network mask:      ")
+	fmt.Print("\u001b[34;1m[*] Network mask:    ")
 	fmt.Printf("\u001b[0m%s\n", mask)
 
-	fmt.Print("\u001b[34;1m[*] Mask in Binary:    ")
+	fmt.Print("\u001b[34;1m[*] Mask in Binary:  ")
 	fmt.Printf("\u001b[0m%s\n", ips.CalculateMask(bits))
 
-	fmt.Print("\u001b[34;1m[*] Wildcard:          ")
+	fmt.Print("\u001b[34;1m[*] Wildcard:        ")
 	fmt.Printf("\u001b[0m%s\n", ips.SubtractIps("255.255.255.255", ips.ConvertToDecimal(ips.CalculateMask(bits))))
 
-	fmt.Print("\u001b[34;1m[*] Network address:   ")
+	fmt.Print("\u001b[34;1m[*] Network address: ")
 	fmt.Printf("\u001b[0m%s\n", ips.ConvertToDecimal(ips.NetworkAddress(bits, ips.ConvertToBinary(ip))))
 
-	fmt.Print("\u001b[34;1m[*] Broadcast address: ")
+	fmt.Print("\u001b[34;1m[*] Broadcast:       ")
 	fmt.Printf("\u001b[0m%s\n", ips.ConvertToDecimal(ips.BroadcastAddress(bits, ips.ConvertToBinary(ip))))
 
-	fmt.Print("\u001b[34;1m[*] Min IP:            ")
+	fmt.Print("\u001b[34;1m[*] Min IP:          ")
 	fmt.Printf("\u001b[0m%s\n", ips.AddIps(ips.ConvertToDecimal(ips.NetworkAddress(bits, ips.ConvertToBinary(ip))), "0.0.0.1"))
 
-	fmt.Print("\u001b[34;1m[*] Max IP:            ")
+	fmt.Print("\u001b[34;1m[*] Max IP:          ")
 	fmt.Printf("\u001b[0m%s\n", ips.SubtractIps(ips.ConvertToDecimal(ips.BroadcastAddress(bits, ips.ConvertToBinary(ip))), "0.0.0.1"))
 
 	fmt.Println()
