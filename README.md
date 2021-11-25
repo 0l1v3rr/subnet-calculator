@@ -1,5 +1,5 @@
 # IPv4 Subnet Calculator
-<img src="img/img.png">
+<img src="screenshots/v2.png">
 
 ## Quick Start
 ### Linux & Mac:
