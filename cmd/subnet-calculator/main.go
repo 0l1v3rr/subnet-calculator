@@ -10,10 +10,9 @@ import (
 )
 
 var (
-	ip     string
-	mask   string
-	bits   string
-	choice string
+	ip   string
+	mask string
+	bits string
 )
 
 func main() {
@@ -32,73 +31,58 @@ func main() {
 				continue
 			}
 
+			if len(strings.Split(input, " ")) >= 2 {
+				splitted := strings.Split(input, " ")
+				if !ips.IsValidIp(splitted[0]) {
+					error("Please specify a valid IP address!")
+					break
+				}
+
+				if !ips.IsValidIp(splitted[1]) {
+					error("Please specify a valid network mask!")
+					break
+				}
+
+				ip = splitted[0]
+				mask = splitted[1]
+				bits = ips.ConvertMaskToBits(ips.ConvertToBinary(mask))
+				break
+			}
+
+			if len(strings.Split(input, "/")) == 2 {
+				splitted := strings.Split(input, "/")
+				if !ips.IsValidIp(splitted[0]) {
+					error("Please specify a valid IP address!")
+					break
+				}
+
+				if !ips.IsValidPrefix(splitted[1]) {
+					error("Please specify a valid prefix!")
+					break
+				}
+
+				ip = splitted[0]
+				bits = splitted[1]
+				mask = ips.ConvertToDecimal(ips.CalculateMask(splitted[1]))
+				break
+			}
+
 			if ips.IsValidIp(input) {
 				ip = input
+				if ips.IpClass(ip) == "A" {
+					bits = "8"
+					mask = "255.0.0.0"
+				} else if ips.IpClass(ip) == "B" {
+					bits = "16"
+					mask = "255.255.0.0"
+				} else {
+					bits = "24"
+					mask = "255.255.255.0"
+				}
 				break
 			}
+
 			error("Please specify a valid IP address!")
-		}
-
-		message("$", "Which one do you want to specify?")
-		fmt.Println(" \u001b[32;1m~ [1] \u001b[0mNetwork mask (E.g 255.255.255.0)")
-		fmt.Println(" \u001b[32;1m~ [2] \u001b[0mNumber of bits identifying the network (E.g 24)")
-		for {
-			prompt("choose")
-			input, _ := reader.ReadString('\n')
-			input = strings.TrimSuffix(input, "\n")
-			fmt.Print("\u001b[0m")
-
-			if input == "" || input == " " {
-				continue
-			}
-
-			if input == "1" || input == "2" {
-				choice = input
-				break
-			}
-			error("Please specify 1 or 2!")
-		}
-
-		if choice == "1" {
-			for {
-				prompt("mask")
-				input, _ := reader.ReadString('\n')
-				input = strings.TrimSuffix(input, "\n")
-				fmt.Print("\u001b[0m")
-
-				if input == "" || input == " " {
-					continue
-				}
-
-				if ips.IsValidIp(input) {
-					mask = input
-					break
-				}
-				error("Please specify a valid network mask!")
-			}
-		} else {
-			for {
-				prompt("bits")
-				input, _ := reader.ReadString('\n')
-				input = strings.TrimSuffix(input, "\n")
-				fmt.Print("\u001b[0m")
-
-				if input == "" || input == " " {
-					continue
-				}
-
-				if ips.IsValidMask(input) {
-					bits = input
-					break
-				}
-				error("Please specify a valid argument!")
-			}
-		}
-
-		if choice == "1" {
-			bits = ips.ConvertMaskToBits(ips.ConvertToBinary(mask))
-		} else {
-			mask = ips.ConvertToDecimal(ips.CalculateMask(bits))
 		}
 
 		resTitle()

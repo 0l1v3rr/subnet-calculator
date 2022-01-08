@@ -29,12 +29,12 @@ func IsValidIp(ip string) bool {
 	return true
 }
 
-func IsValidMask(mask string) bool {
+func IsValidPrefix(mask string) bool {
 	converted, err := strconv.Atoi(mask)
 	if err != nil {
 		return false
 	}
-	if converted < 1 || converted > 32 {
+	if converted < 1 || converted >= 30 {
 		return false
 	}
 	return true
