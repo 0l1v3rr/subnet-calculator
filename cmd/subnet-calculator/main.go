@@ -21,82 +21,71 @@ func main() {
 
 	for {
 		message("$", "Specify the IP address you want to calculate:")
-		for {
-			prompt("ip")
-			input, _ := reader.ReadString('\n')
-			input = strings.TrimSuffix(input, "\n")
-			fmt.Print("\u001b[0m")
 
-			if input == "" || input == " " {
-				continue
-			}
-
-			if len(strings.Split(input, " ")) >= 2 {
-				splitted := strings.Split(input, " ")
-				if !ips.IsValidIp(splitted[0]) {
-					error("Please specify a valid IP address!")
-					break
-				}
-
-				if !ips.IsValidIp(splitted[1]) {
-					error("Please specify a valid network mask!")
-					break
-				}
-
-				ip = splitted[0]
-				mask = splitted[1]
-				bits = ips.ConvertMaskToBits(ips.ConvertToBinary(mask))
-				break
-			}
-
-			if len(strings.Split(input, "/")) == 2 {
-				splitted := strings.Split(input, "/")
-				if !ips.IsValidIp(splitted[0]) {
-					error("Please specify a valid IP address!")
-					break
-				}
-
-				if !ips.IsValidPrefix(splitted[1]) {
-					error("Please specify a valid prefix!")
-					break
-				}
-
-				ip = splitted[0]
-				bits = splitted[1]
-				mask = ips.ConvertToDecimal(ips.CalculateMask(splitted[1]))
-				break
-			}
-
-			if ips.IsValidIp(input) {
-				ip = input
-				if ips.IpClass(ip) == "A" {
-					bits = "8"
-					mask = "255.0.0.0"
-				} else if ips.IpClass(ip) == "B" {
-					bits = "16"
-					mask = "255.255.0.0"
-				} else {
-					bits = "24"
-					mask = "255.255.255.0"
-				}
-				break
-			}
-
-			error("Please specify a valid IP address!")
-		}
-
-		resTitle()
-		printInfo()
-
-		message("$", "If you want to exit, type 'yes', else type 'no'!")
-		prompt("choose")
+		prompt("ip")
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSuffix(input, "\n")
 		fmt.Print("\u001b[0m")
 
-		if strings.HasPrefix(input, "y") {
-			break
+		if strings.HasPrefix(input, "ex") {
+			return
 		}
+
+		if input == "" || input == " " {
+			continue
+		}
+
+		if len(strings.Split(input, " ")) >= 2 {
+			splitted := strings.Split(input, " ")
+			if !ips.IsValidIp(splitted[0]) {
+				error("Please specify a valid IP address!\n")
+				continue
+			}
+
+			if !ips.IsValidMask(splitted[1]) {
+				error("Please specify a valid network mask!\n")
+				continue
+			}
+
+			ip = splitted[0]
+			mask = splitted[1]
+			bits = ips.ConvertMaskToBits(ips.ConvertToBinary(mask))
+
+		} else if len(strings.Split(input, "/")) == 2 {
+			splitted := strings.Split(input, "/")
+			if !ips.IsValidIp(splitted[0]) {
+				error("Please specify a valid IP address!\n")
+				continue
+			}
+
+			if !ips.IsValidPrefix(splitted[1]) {
+				error("Please specify a valid prefix!\n")
+				continue
+			}
+
+			ip = splitted[0]
+			bits = splitted[1]
+			mask = ips.ConvertToDecimal(ips.CalculateMask(splitted[1]))
+
+		} else if ips.IsValidIp(input) {
+			ip = input
+			if ips.IpClass(ip) == "A" {
+				bits = "8"
+				mask = "255.0.0.0"
+			} else if ips.IpClass(ip) == "B" {
+				bits = "16"
+				mask = "255.255.0.0"
+			} else {
+				bits = "24"
+				mask = "255.255.255.0"
+			}
+		} else {
+			error("Please specify a valid IP address!\n")
+			continue
+		}
+
+		resTitle()
+		printInfo()
 	}
 }
 

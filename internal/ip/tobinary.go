@@ -11,7 +11,10 @@ func ConvertToBinary(ip string) string {
 	splitted := strings.Split(ip, ".")
 
 	for _, s := range splitted {
-		c, _ := strconv.Atoi(s)
+		c, err := strconv.Atoi(s)
+		if err != nil {
+			return ""
+		}
 		binary := strconv.FormatInt(int64(c), 2)
 		res += fmt.Sprintf("%s.", addZeros(binary))
 	}
